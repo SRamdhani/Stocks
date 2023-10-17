@@ -1,0 +1,23 @@
+# Packages
+*.csv
+*.egg
+*.jar
+*.pyc
+*.pkl
+*.pickle
+*.so
+.DS_Store
+.cache
+.idea
+.idea/*
+.pytest_cache
+.pytest_cache/*
+/*.egg.info
+/dist/*
+/instantiate
+__pycache__
+_build
+build
+*.npy
+*.html
+*.pickle
