@@ -11,6 +11,9 @@ import numpy as np
 import json
 import os
 
+# TODO: Add logging to classes!
+# TODO: Add Readme!
+
 def getLogDictInfo(pkgLocation, className, methodName):
     return {
         'class': className,
@@ -37,7 +40,7 @@ Logger.info(getLogDictInfo('run', __name__, __name__),
             'Max Reward Models: ' + json.dumps(max_reward_models),
             logger)
 
-for i, target in enumerate(['SPY', 'MSFT', 'QQQ', 'TSLA', 'GOOG']):
+for i, target in enumerate(['TSLA', 'SPY', 'MSFT', 'QQQ', 'GOOG']):
     huber_loss = keras.losses.Huber()
     action_probs_history = []
     critic_value_history = []
@@ -52,54 +55,21 @@ for i, target in enumerate(['SPY', 'MSFT', 'QQQ', 'TSLA', 'GOOG']):
     Logger.info(getLogDictInfo('run', __name__, __name__),
                 'Running Model for: ' + target, logger)
 
-    if i ==0:
-        Logger.info(getLogDictInfo('run', __name__, __name__),
-                    'Database update.' , logger)
-
-        update.database(allSymbols, session=session)
-
-        if not os.path.exists('~/stocks/factorRes.pkl'):
-            Logger.info(getLogDictInfo('run', __name__, __name__),
-                        'Factor Components Does Not Exist. Creating Pickle Backup.', logger)
-
-            factorRes, symbols, rewardArr, anchor_date = Model.Decomposition(allSymbols, session, components = COMPNUM,
-                                                                    rewardName = target, anchor_symbol = 'SPY',
-                                                                    getFactorRes = True)
-
-
-            with open('./factorRes.pkl','wb') as f:
-                pkl.dump(factorRes,f)
-        else:
-            Logger.info(getLogDictInfo('run', __name__, __name__),
-                        'Factor Components Exists. Loading Pickle Backup.', logger)
-
-            symbols, rewardArr, anchor_date = Model.Decomposition(allSymbols, session, components = COMPNUM,
-                                                         rewardName = target, anchor_symbol = 'SPY',
-                                                         getFactorRes = False)
-            
-            with open('./factorRes.pkl','rb') as f:
-                factorRes = pkl.load(f)
-    else:
-        Logger.info(getLogDictInfo('run', __name__, __name__),
-                    'Factor Components Exists. Loading Pickle Backup.', logger)
-        symbols, rewardArr, anchor_date = Model.Decomposition(allSymbols, session, components = COMPNUM,
-                                                     rewardName = target, anchor_symbol = 'SPY',
-                                                     getFactorRes = False)
-        with open('./factorRes.pkl','rb') as f:
-            factorRes = pkl.load(f)
-
+    symbols, rewardArr, anchor_date, factorRes = Model.getDecomposition(i, logger, update,
+                                                                        allSymbols, session,
+                                                                        COMPNUM, target)
     if i == 0:
         Logger.info(getLogDictInfo('run', __name__, __name__),
                     'Anchor Date: ' + str(anchor_date[-1]), logger)
-
-    Logger.info(getLogDictInfo('run', __name__, __name__),
-                'Environment Set Up.', logger)
 
     env = envSetup(window=WINDOW,
                    compData=factorRes[0],
                    rewardData=rewardArr,
                    actionDict=dict(zip(range(len(ACTIONS)),ACTIONS)),
                    balance=10000)
+
+    Logger.info(getLogDictInfo('run', __name__, __name__),
+                'Environment Set Up.', logger)
 
     observation_dimensions = WINDOW*COMPNUM
     num_actions            = len(ACTIONS)
@@ -137,6 +107,7 @@ for i, target in enumerate(['SPY', 'MSFT', 'QQQ', 'TSLA', 'GOOG']):
         episode_reward = 0
         env.penalty = -5
 
+        # Borrowed and adapted from https://keras.io/examples/rl/actor_critic_cartpole/.
         with tf.GradientTape() as tape:
             for timestep in range(env.maxiter):
                 # env.render(); Adding this line would show the attempts
