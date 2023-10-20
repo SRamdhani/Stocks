@@ -1,4 +1,6 @@
 # Packages
+*.keras
+*.results
 *.csv
 *.egg
 *.jar

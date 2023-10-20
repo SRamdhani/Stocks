@@ -20,6 +20,8 @@ iexfinance = "^0.5.0"
 sqlalchemy = "^2.0.22"
 psycopg2 = "^2.9.9"
 keras = "2.13.1"
+streamlit = "^1.27.2"
+altair = "^5.1.2"
 
 
 [build-system]
