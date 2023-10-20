@@ -26,7 +26,7 @@ The final model will be output with ```SYMBOL.keras``` and ```SYMBOL.results``` 
 ,Model Run Date,Actual Close Price On Model Run Date,Prediction,Stock,Buy,Sell,Hold
 0,YYYY-MM-DD,PRICE,,SYMBOL,,,
 ```
-The ```predictions.csv``` can be visualized using a basic streamlit app where the green arrows indicate a buy signal and red arrows indicate a sell symbol. 
+The ```predictions.csv``` can be visualized using a streamlit app where the green arrows indicate a buy signal and red arrows indicate a sell symbol. 
 
 ![Mode prediction results when visualized with streamlit.](tensorsRLStocks.png)
 
