@@ -18,10 +18,7 @@ class Train:
         action_probs_history = []
         critic_value_history = []
         main_action_history = []
-        # shares_history = []
-        # balance_history = []
         rewards_history = []
-        # running_reward = 0
         episode_count = 0
         iterations = -1
 
