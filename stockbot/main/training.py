@@ -10,13 +10,6 @@ import json
 class Train:
 
     @staticmethod
-    def getLogDictInfo(pkgLocation, className, methodName):
-        return {
-            'class': className,
-            'method': methodName,
-            'pkgLocation': pkgLocation
-        }
-    @staticmethod
     def train(env, model, num_actions, gamma,
               target, logger, anchor_date, window, refresh,
               max_reward_models, total_iterations, eps):
@@ -123,7 +116,7 @@ class Train:
             # Log details
             episode_count += 1
             template = target + " running reward: {:.2f} at episode {}"
-            Logger.info(Train.getLogDictInfo('run', __name__, __name__),
+            Logger.info(Logger().getLogDictInfo('run', __name__, __name__),
                         template.format(running_reward, episode_count), logger)
 
             if running_reward > max_reward:
@@ -137,7 +130,7 @@ class Train:
                 results.to_csv(target.lower() + '_larger_penalty.results', index=None)
                 model.save(target.lower() + "_larger_penalty.keras")
 
-                Logger.info(Train.getLogDictInfo(__class__.__name__, __name__, 'train'),
+                Logger.info(Logger().getLogDictInfo(__class__.__name__, __name__, 'train'),
                             'Saved Model for ' + target + ' with reward: ' + str(max_reward), logger)
 
             if iterations > total_iterations:

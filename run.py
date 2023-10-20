@@ -38,20 +38,20 @@ allSymbols  = ['SPY', 'GOOG', 'MSFT', 'TSLA','QQQ','IWM','GLD','SMH','TLT','IYT'
               'V','AXP','DAL','HD','AMZN','UPS','CMG','VZ','BA','CRM','JPM','DIS','SBUX','RTX','XOM']
 
 max_reward_models = json.load(open('max_reward_models.json','r'))
-Logger.info(Model().getLogDictInfo('run', __name__, __name__),
+Logger.info(Logger().getLogDictInfo('run', __name__, __name__),
             'Max Reward Models: ' + json.dumps(max_reward_models),
             logger)
 
 for i, target in enumerate(['TSLA', 'SPY', 'MSFT', 'QQQ', 'GOOG']):
 
-    Logger.info(Model().getLogDictInfo('run', __name__, __name__),
+    Logger.info(Logger().getLogDictInfo('run', __name__, __name__),
                 'Running Model for: ' + target, logger)
 
     symbols, rewardArr, anchor_date, factorRes = Model.getDecomposition(i, logger, update,
                                                                         allSymbols, session,
                                                                         COMPNUM, target)
     if i == 0:
-        Logger.info(Model().getLogDictInfo('run', __name__, __name__),
+        Logger.info(Logger().getLogDictInfo('run', __name__, __name__),
                     'Anchor Date: ' + str(anchor_date[-1]), logger)
 
     env = envSetup(window=WINDOW,
@@ -60,16 +60,16 @@ for i, target in enumerate(['TSLA', 'SPY', 'MSFT', 'QQQ', 'GOOG']):
                    actionDict=dict(zip(range(len(ACTIONS)),ACTIONS)),
                    balance=10000)
 
-    Logger.info(Model().getLogDictInfo('run', __name__, __name__),
+    Logger.info(Logger().getLogDictInfo('run', __name__, __name__),
                 'Environment Set Up.', logger)
 
     try:
         model = keras.models.load_model(target.lower() + '_larger_penalty.keras')
-        Logger.info(Model().getLogDictInfo('run', __name__, __name__),
+        Logger.info(Logger().getLogDictInfo('run', __name__, __name__),
                     'Loaded Existing Model for ' + target.lower(), logger)
     except Exception as e:
-        Logger.info(Model().getLogDictInfo('run', __name__, __name__), str(e), logger)
-        Logger.info(Model().getLogDictInfo('run', __name__, __name__),
+        Logger.info(Logger().getLogDictInfo('run', __name__, __name__), str(e), logger)
+        Logger.info(Logger().getLogDictInfo('run', __name__, __name__),
                     'No Existing Model for ' + target.lower(), logger)
         model = Model.basicACModel(num_inputs, num_hidden, num_actions)
 
@@ -80,13 +80,13 @@ for i, target in enumerate(['TSLA', 'SPY', 'MSFT', 'QQQ', 'GOOG']):
     try:
         model = keras.models.load_model(target.lower() + '_larger_penalty.keras')
     except Exception as e:
-        Logger.error(Model().getLogDictInfo('run', __name__, __name__),
+        Logger.error(Logger().getLogDictInfo('run', __name__, __name__),
                      str(e), logger)
         continue
 
     state = tf.convert_to_tensor(env.predData.flatten())
     state = tf.expand_dims(state, 0)
-    Logger.info(Model().getLogDictInfo('run', __name__, __name__),
+    Logger.info(Logger().getLogDictInfo('run', __name__, __name__),
                 target + str(model(state)), logger)
 
     target_pred = model(state)[0].numpy()

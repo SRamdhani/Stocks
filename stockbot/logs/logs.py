@@ -11,6 +11,13 @@ import logging
 
 @dataclass(frozen=True, unsafe_hash=True)
 class Logger:
+    @staticmethod
+    def getLogDictInfo(pkgLocation, className, methodName):
+        return {
+            'class': className,
+            'method': methodName,
+            'pkgLocation': pkgLocation
+        }
 
     @staticmethod
     def debug(loggingDict, message, logger):

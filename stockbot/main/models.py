@@ -49,13 +49,13 @@ class Model(Train):
     @staticmethod
     def getDecomposition(i, logger, update, allSymbols, session, compnum, target):
         if i == 0:
-            Logger.info(Model.getLogDictInfo(__class__.__name__, __name__, 'getDecomposition'),
+            Logger.info(Logger().getLogDictInfo(__class__.__name__, __name__, 'getDecomposition'),
                         'Database update.', logger)
 
             update.database(allSymbols, session=session)
 
             if not os.path.exists('factorRes.pkl'):
-                Logger.info(Model.getLogDictInfo(__class__.__name__, __name__, 'getDecomposition'),
+                Logger.info(Logger().getLogDictInfo(__class__.__name__, __name__, 'getDecomposition'),
                             'Factor Components Does Not Exist. Creating Pickle Backup.', logger)
 
                 factorRes, symbols, rewardArr, anchor_date = Model.decomposition(allSymbols, session,
@@ -66,7 +66,7 @@ class Model(Train):
                 with open('factorRes.pkl', 'wb') as f:
                     pkl.dump(factorRes, f)
             else:
-                Logger.info(Model.getLogDictInfo(__class__.__name__, __name__, 'getDecomposition'),
+                Logger.info(Logger().getLogDictInfo(__class__.__name__, __name__, 'getDecomposition'),
                             'Factor Components Exists. Loading Pickle Backup.', logger)
 
                 symbols, rewardArr, anchor_date = Model.decomposition(allSymbols, session, components=compnum,
@@ -77,7 +77,7 @@ class Model(Train):
                     factorRes = pkl.load(f)
 
         else:
-            Logger.info(Model.getLogDictInfo(__class__.__name__, __name__, 'getDecomposition'),
+            Logger.info(Logger().getLogDictInfo(__class__.__name__, __name__, 'getDecomposition'),
                         'Factor Components Exists. Loading Pickle Backup.', logger)
 
             symbols, rewardArr, anchor_date = Model.decomposition(allSymbols, session, components=compnum,
