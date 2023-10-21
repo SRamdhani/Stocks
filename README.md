@@ -34,3 +34,6 @@ The ```predictions.csv``` can be visualized using a streamlit app where the gree
 - More free data features to the model (i.e., economic data, available balance statements). So far I am using free yahoo finance data.
 - Validation metrics on model performance.
 - Orchestration for automatic refresh (i.e., airflow).
+
+### Contact 
+If you would like to collaborate or need any help with the code you can reach me at satesh.ramdhani@gmail.com. 
