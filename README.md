@@ -1,10 +1,10 @@
 # Stocks Model
 
 ### Contents 
-This repository sets up a template to sync yahoo finance data in to a postgres database with a moving window. It sets up a decomposition based on parafac. 
+This repository sets up a template to sync yahoo finance data in to a postgres database with a moving window.  
 
 ### Methodology
-A basic reinforcement (A2C) model borrowed from keras examples is used to simulate different trading options to train an agent. The results can be visualized via a basic streamlit application.
+Using a decomposition based on parafac, the time relevant scores are then used within a basic reinforcement (A2C) model borrowed from keras examples is used to simulate different trading options to train an agent. The results can be visualized via a basic streamlit application.
 
 ### Local Database. 
 This assumes a local postgres database has been set up and accessible via port 5432 and running with the database name stockcurrency. See ```__init__.py``` file has the excerpt ```postgresql://localhost/stockcurrency```.
