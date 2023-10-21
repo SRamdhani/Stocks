@@ -1,21 +1,31 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+import numpy as np
 
 @dataclass(frozen=False, unsafe_hash=True)
 class envSetup:
-    def __init__(self, window, compData, rewardData,
-                 actionDict, balance = 10000):
-        self.window            = window
-        self.compData          = compData
-        self.rewardData        = rewardData
-        self.actionDict        = actionDict
-        self.reverseActionDict = {actionDict[k]:k for k in actionDict}
-        self.balance           = balance
-        self.maxiter           = len(compData)-window
-        self.shares            = 0
-        self.sharePrice        = 0
-        self.origBalance       = balance
-        self.penalty           = -100
-        self.predData          = compData[self.maxiter:(self.maxiter+window),:]
+    window: int = field(init=True, default=int, repr=False, compare=False)
+    compData: int = field(init=True, default=int, repr=False, compare=False)
+    rewardData: np.ndarray = field(init=True, default_factory=lambda: np.ndarray, repr=False, compare=False)
+    actionDict: dict = field(init=True, default_factory=dict, repr=False, compare=False)
+    balance: float = field(init=True, default=10000., repr=False, compare=False)
+    reverseActionDict: dict = field(init=False, default=dict, repr=False, compare=False)
+    maxiter: int = field(init=False, default=int, repr=False, compare=False)
+    shares: int = field(init=False, default=0, repr=False, compare=False)
+    sharePrice: int = field(init=False, default=0, repr=False, compare=False)
+    origBalance: float = field(init=False, default=float, repr=False, compare=False)
+    penalty: float = field(init=False, default=-100., repr=False, compare=False)
+    predData: np.ndarray = field(init=False, default_factory=lambda: np.ndarray, repr=False, compare=False)
+
+    def __post_init__(self):
+        reverseActionDict = {self.actionDict[k]:k for k in self.actionDict}
+        maxiter           = len(self.compData)-self.window
+        origBalance       = self.balance
+        predData          = self.compData[maxiter:(maxiter+self.window),:]
+
+        object.__setattr__(self, 'reverseActionDict', reverseActionDict)
+        object.__setattr__(self, 'maxiter', maxiter)
+        object.__setattr__(self, 'origBalance', origBalance)
+        object.__setattr__(self, 'predData', predData)
 
     def step(self, it, action):
         # Check Done status and get New Observation.
