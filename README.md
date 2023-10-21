@@ -19,6 +19,7 @@ pip install poetry
 poetry install
 python prediction_template.py # Change and add historical data you want per symbol.
 python run.py
+streamlit run application.py # To run the application after model/db update.
 ```
 ### Details
 The data is pulled in ```dbupdate.py``` from August 2018 to change that review the line:
