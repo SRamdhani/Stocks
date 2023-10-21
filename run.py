@@ -14,7 +14,7 @@ import os
 # TODO: Add Readme!
 
 # Configuration parameters for the whole setup
-TOTAL_ITERATIONS = 10
+TOTAL_ITERATIONS = 2
 REFRESH          = True
 ACTIONS          = ['buy', 'sell', 'hold']
 WINDOW           = 45
@@ -99,14 +99,9 @@ for i, target in enumerate(['TSLA', 'SPY', 'MSFT', 'QQQ', 'GOOG']):
                 target_pred[0][2]]
 
     predictions.loc[len(predictions.index)] = predItem
-
-    del globals()['model']
-    del globals()['grads']
-    del globals()['optimizer']
-    del globals()['factorRes']
     tf.keras.backend.clear_session()
 
 predictions.to_csv('predictions.csv')
 os.remove('factorRes.pkl')
-Logger.info(Model().getLogDictInfo('run', __name__, __name__),
+Logger.info(Logger().getLogDictInfo('run', __name__, __name__),
         'Saved Predictions & Deleted Factor Components.', logger)
